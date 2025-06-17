@@ -4,7 +4,7 @@
 gTTS 라이브러리를 사용하여 텍스트 파일의 영어 문장들을 MP3 파일로 변환
 
 사용법: python gtts.py <텍스트파일명>
-예시: python gtts.py learn_0616.txt
+예시: python gtts.py sample.txt
 """
 
 import sys
@@ -220,7 +220,7 @@ def main():
     # 명령행 인자 확인
     if len(sys.argv) != 2:
         print("사용법: python english_tts.py <텍스트파일명>")
-        print("예시: python english_tts.py learn_0616.txt")
+        print("예시: python english_tts.py sample.txt")
         sys.exit(1)
     
     input_filename = sys.argv[1]
