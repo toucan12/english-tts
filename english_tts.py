@@ -34,7 +34,7 @@ def read_text_file(filename):
 
 def create_combined_audio(sentences, output_filename, lang='en'):
     """
-    각 문장을 개별적으로 변환한 후 1초 무음과 함께 결합
+    각 문장을 개별적으로 변환한 후 2초 무음과 함께 결합
     
     Args:
         sentences (list): 변환할 문장들의 리스트
@@ -68,7 +68,7 @@ def check_ffmpeg_available():
         return False
 
 def create_audio_with_ffmpeg(sentences, output_filename, lang='en'):
-    """FFmpeg를 사용해서 각 문장 사이에 정확히 1초 무음 추가 (고품질 44100Hz, 320kbps)"""
+    """FFmpeg를 사용해서 각 문장 사이에 정확히 2초 무음 추가 (고품질 44100Hz, 320kbps)"""
     temp_files = []
     
     try:
@@ -94,9 +94,9 @@ def create_audio_with_ffmpeg(sentences, output_filename, lang='en'):
             temp_files.append(temp_file)
             temp_files.append(temp_raw_file)  # 원본 파일도 정리 목록에 추가
         
-        # 1초 무음 파일 생성
+        # 2초 무음 파일 생성
         silence_file = "temp_silence.mp3"
-        create_silence_mp3(silence_file, duration=1.0)
+        create_silence_mp3(silence_file, duration=2.0)
         temp_files.append(silence_file)
         
         # FFmpeg로 파일들을 결합
@@ -105,7 +105,7 @@ def create_audio_with_ffmpeg(sentences, output_filename, lang='en'):
         combine_files_with_ffmpeg(audio_files, silence_file, output_filename)
         
         print(f"✅ 고품질 음성 파일이 생성되었습니다: {output_filename}")
-        print(f"📝 각 문장 사이에 정확히 1초의 무음이 추가되었습니다.")
+        print(f"📝 각 문장 사이에 정확히 2초의 무음이 추가되었습니다.")
         print(f"🎵 음질: 44100Hz, 320kbps, 스테레오")
         print(f"🔊 오디오 개선: 볼륨 정규화 + 컴프레서 + 노이즈 필터링")
         
@@ -117,7 +117,7 @@ def create_audio_with_ffmpeg(sentences, output_filename, lang='en'):
             except OSError:
                 pass
 
-def create_silence_mp3(filename, duration=1.0):
+def create_silence_mp3(filename, duration=2.0):
     """지정된 길이의 고품질 무음 MP3 파일 생성"""
     import subprocess
     
