@@ -3,8 +3,8 @@
 영어 학습용 TTS(Text-to-Speech) 프로그램
 gTTS 라이브러리를 사용하여 텍스트 파일의 영어 문장들을 MP3 파일로 변환
 
-사용법: python gtts.py <텍스트파일명>
-예시: python gtts.py sample.txt
+사용법: python english_tts.py <텍스트파일명>
+예시: python english_tts.py sample.txt
 """
 
 import sys
@@ -32,14 +32,14 @@ def read_text_file(filename):
         print(f"파일 읽기 오류: {e}")
         return None
 
-def create_combined_audio(sentences, output_filename, lang='en'):
+def create_combined_audio(sentences, output_filename, lang='en-us'):
     """
     각 문장을 개별적으로 변환한 후 2초 무음과 함께 결합
     
     Args:
         sentences (list): 변환할 문장들의 리스트
         output_filename (str): 출력할 MP3 파일명
-        lang (str): 언어 코드 (기본값: 'en')
+        lang (str): 언어 코드 (기본값: 'en-us')
     """
     try:
         # ffmpeg 사용 가능 여부 확인
@@ -51,7 +51,7 @@ def create_combined_audio(sentences, output_filename, lang='en'):
             return
             
         print("🔧 FFmpeg를 사용하여 고품질 TTS + 오디오 개선을 적용합니다...")
-        print("   📊 적용 효과: 볼륨 정규화, 컴프레서, 노이즈 필터링")
+        print("   📊 적용 효과: 볼륨 20% 증가, 컴프레서, 노이즈 필터링")
         create_audio_with_ffmpeg(sentences, output_filename, lang)
             
     except Exception as e:
@@ -67,7 +67,7 @@ def check_ffmpeg_available():
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
 
-def create_audio_with_ffmpeg(sentences, output_filename, lang='en'):
+def create_audio_with_ffmpeg(sentences, output_filename, lang='en-us'):
     """FFmpeg를 사용해서 각 문장 사이에 정확히 2초 무음 추가 (고품질 44100Hz, 320kbps)"""
     temp_files = []
     
@@ -78,7 +78,7 @@ def create_audio_with_ffmpeg(sentences, output_filename, lang='en'):
         for i, sentence in enumerate(sentences):
             print(f"  🔊 {i+1}/{len(sentences)}: {sentence[:50]}...")
             
-            # 개별 TTS 생성 (음질 향상 설정)
+            # 개별 TTS 생성 (미국 영어)
             tts = gTTS(text=sentence.strip(), lang='en-us', slow=False)
             
             # 임시 파일에 저장 후 고품질로 변환
@@ -105,9 +105,9 @@ def create_audio_with_ffmpeg(sentences, output_filename, lang='en'):
         combine_files_with_ffmpeg(audio_files, silence_file, output_filename)
         
         print(f"✅ 고품질 음성 파일이 생성되었습니다: {output_filename}")
-        print(f"📝 각 문장 사이에 정확히 2초의 무음이 추가되었습니다.")
+        print(f"📝 각 문장 사이와 마지막에 정확히 2초의 무음이 추가되었습니다.")
         print(f"🎵 음질: 44100Hz, 320kbps, 스테레오")
-        print(f"🔊 오디오 개선: 볼륨 정규화 + 컴프레서 + 노이즈 필터링")
+        print(f"🔊 오디오 개선: 볼륨 20% 증가 + 컴프레서 + 노이즈 필터링")
         
     finally:
         # 임시 파일들 정리
@@ -136,11 +136,11 @@ def create_silence_mp3(filename, duration=2.0):
     subprocess.run(cmd, capture_output=True, check=True)
 
 def convert_to_high_quality(input_file, output_file):
-    """TTS 파일을 고품질 MP3로 변환 (볼륨 정규화 + 컴프레서 적용)"""
+    """TTS 파일을 고품질 MP3로 변환 (볼륨 20% 증가 + 컴프레서 적용)"""
     import subprocess
     
     # FFmpeg로 고품질 변환 + 오디오 개선 필터
-    # loudnorm: 볼륨 정규화 (LUFS 표준)
+    # loudnorm: 볼륨 정규화 (20% 증가, Peak 제한)
     # acompressor: 다이나믹 레인지 압축으로 음성 명료도 향상
     # highpass: 저주파 노이즈 제거
     # lowpass: 고주파 노이즈 제거 (음성에 불필요한 고주파)
@@ -148,7 +148,7 @@ def convert_to_high_quality(input_file, output_file):
         'highpass=f=80',           # 80Hz 이하 저주파 노이즈 제거
         'lowpass=f=8000',          # 8kHz 이상 고주파 노이즈 제거 (음성 최적화)
         'acompressor=threshold=-18dB:ratio=3:attack=3:release=100:makeup=2dB',  # 컴프레서
-        'loudnorm=I=-16:TP=-1.5:LRA=11'  # 볼륨 정규화
+        'loudnorm=I=-13:TP=-1.0:LRA=11'  # 볼륨 정규화 (20% 증가, Peak 제한)
     ]
     
     cmd = [
@@ -179,11 +179,10 @@ def combine_files_with_ffmpeg(audio_files, silence_file, output_filename):
         filter_parts.append(f'[{input_index}]')
         input_index += 1
         
-        # 마지막 파일이 아니면 무음 추가
-        if i < len(audio_files) - 1:
-            inputs.extend(['-i', silence_file])
-            filter_parts.append(f'[{input_index}]')
-            input_index += 1
+        # 모든 파일 뒤에 무음 추가 (마지막 파일 포함)
+        inputs.extend(['-i', silence_file])
+        filter_parts.append(f'[{input_index}]')
+        input_index += 1
     
     # 파일 결합 + 최종 오디오 개선 필터
     concat_filter = ''.join(filter_parts) + f'concat=n={len(filter_parts)}:v=0:a=1[combined]'
@@ -191,7 +190,7 @@ def combine_files_with_ffmpeg(audio_files, silence_file, output_filename):
     # 최종 오디오 개선 필터 체인
     final_filters = [
         'acompressor=threshold=-16dB:ratio=2.5:attack=5:release=150:makeup=1dB',  # 최종 컴프레션
-        'loudnorm=I=-16:TP=-1.5:LRA=11'  # 최종 볼륨 정규화
+        'loudnorm=I=-13:TP=-1.0:LRA=11'  # 최종 볼륨 정규화 (20% 증가, Peak 제한)
     ]
     
     # 전체 필터 체인: 결합 → 최종 개선
