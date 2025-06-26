@@ -1,23 +1,23 @@
-# 영어 학습용 고품질 TTS 프로그램
+# High-Quality TTS Program for English Learning
 
-gTTS(Google Text-to-Speech)와 FFmpeg를 사용하여 텍스트 파일의 영어 문장들을 고품질 MP3 파일로 변환하는 프로그램입니다.
+A program that converts English sentences from text files to high-quality MP3 files using gTTS (Google Text-to-Speech) and FFmpeg.
 
-## 특징
+## Features
 
-- ✅ **고품질 음성**: 44100Hz, 320kbps, 스테레오
-- ✅ **정확한 1초 pause**: 각 문장 사이에 정확히 1초 무음 추가
-- ✅ **오디오 개선**: 볼륨 정규화 + 컴프레서 + 노이즈 필터링
-- ✅ **미국식 영어**: en-us 발음으로 더 정확한 발음
-- ✅ **명료한 음성**: 작은 자음도 선명하게 들림
+- ✅ **High-Quality Audio**: 44100Hz, 320kbps, stereo
+- ✅ **Precise 2-Second Pause**: Exactly 2 seconds of silence added between each sentence
+- ✅ **Audio Enhancement**: Volume normalization + compressor + noise filtering
+- ✅ **US English**: More accurate pronunciation with en-us accent
+- ✅ **Clear Voice**: Even small consonants are clearly audible
 
-## 필요 조건
+## Requirements
 
-### 1. Python 라이브러리
+### 1. Python Libraries
 ```bash
 pip install gtts
 ```
 
-### 2. FFmpeg 설치 (필수)
+### 2. FFmpeg Installation (Required)
 
 **macOS (Homebrew):**
 ```bash
@@ -31,67 +31,67 @@ sudo apt install ffmpeg
 ```
 
 **Windows:**
-1. [FFmpeg 공식 사이트](https://ffmpeg.org/download.html)에서 다운로드
-2. 압축 해제 후 PATH에 추가
+1. Download from [FFmpeg official site](https://ffmpeg.org/download.html)
+2. Extract and add to PATH
 
-**설치 확인:**
+**Installation Check:**
 ```bash
 ffmpeg -version
 ```
 
-## 사용법
+## Usage
 
 ```bash
-python english_tts.py <텍스트파일명>
+python english_tts.py <text_filename>
 ```
 
-### 예시
+### Example
 
 ```bash
-python english_tts.py learn_0616.txt
+python english_tts.py sample.txt
 ```
 
-위 명령을 실행하면 `learn_0616.mp3` 파일이 생성됩니다.
+Running the above command will create a `sample.mp3` file.
 
-## 처리 과정
+## Processing Steps
 
-1. **개별 TTS 변환**: 각 문장을 미국식 영어로 개별 변환
-2. **고품질 처리**: FFmpeg로 44100Hz, 320kbps 변환
-3. **오디오 개선**: 노이즈 제거, 볼륨 정규화, 컴프레서 적용
-4. **1초 무음 삽입**: 정확한 타이밍으로 문장 사이 pause 추가
-5. **최종 결합**: 모든 요소를 고품질로 결합
+1. **Individual TTS Conversion**: Convert each sentence individually to US English
+2. **High-Quality Processing**: Convert to 44100Hz, 320kbps using FFmpeg
+3. **Audio Enhancement**: Apply noise removal, volume normalization, and compression
+4. **2-Second Silence Insertion**: Add precise timing pauses between sentences
+5. **Final Combination**: Combine all elements in high quality
 
-## 파일 구조
+## File Structure
 
-- `english_tts.py`: 메인 프로그램
-- `learn_0616.txt`: 예시 영어 문장 파일
-- `requirements.txt`: 필요한 Python 패키지 목록
-- `README.md`: 사용법 안내
+- `english_tts.py`: Main program
+- `sample.txt`: Example English sentence file
+- `requirements.txt`: Required Python packages list
+- `README.md`: Usage guide
 
-## 오디오 품질 개선 사항
+## Audio Quality Improvements
 
-### 🎵 음질 향상
-- **샘플링 레이트**: 44100Hz (CD 품질)
-- **비트레이트**: 320kbps (최고 MP3 품질)
-- **채널**: 스테레오
+### 🎵 Audio Quality Enhancement
+- **Sampling Rate**: 44100Hz (CD quality)
+- **Bitrate**: 320kbps (highest MP3 quality)
+- **Channels**: Stereo
 
-### 🔊 오디오 처리
-- **볼륨 정규화**: LUFS 표준으로 일정한 음량 유지
-- **다이나믹 컴프레서**: 작은 소리는 크게, 큰 소리는 적당히
-- **노이즈 필터링**: 80Hz~8kHz 음성 주파수 대역에 집중
+### 🔊 Audio Processing
+- **Volume Normalization**: Maintain consistent volume using LUFS standard
+- **Dynamic Compressor**: Enhance quiet sounds, moderate loud sounds
+- **Noise Filtering**: Focus on 80Hz~8kHz voice frequency range
 
-### ⏱️ 타이밍
-- **정확한 1초 pause**: 텍스트 기반이 아닌 실제 무음 삽입
-- **자연스러운 전환**: 문장 간 부드러운 연결
+### ⏱️ Timing
+- **Precise 2-Second Pause**: Real silence insertion, not text-based
+- **Natural Transitions**: Smooth connections between sentences
 
-## 텍스트 파일 형식
+## Text File Format
 
-텍스트 파일은 다음과 같은 형식으로 작성하세요:
-- 한 줄에 하나의 영어 문장
-- 빈 줄은 자동으로 무시됩니다
-- UTF-8 인코딩으로 저장
+Text files should be written in the following format:
+- One English sentence per line
+- Empty lines are automatically ignored
+- Save in UTF-8 encoding
 
-### 예시 (learn_0616.txt):
+### Example (sample.txt):
 ```
 Hello, how are you today?
 I am learning English with Python.
@@ -103,82 +103,82 @@ Thank you for your help.
 See you later, goodbye.
 ```
 
-## 출력 예시
+## Output Example
 
-프로그램 실행 시 다음과 같은 정보가 표시됩니다:
+When running the program, the following information will be displayed:
 
 ```
-📖 텍스트 파일 읽는 중: learn_0616.txt
-📝 총 8개의 문장을 발견했습니다:
+📖 Reading text file: sample.txt
+📝 Found a total of 8 sentences:
   1. Hello, how are you today?
   2. I am learning English with Python.
   ...
 
-🔧 FFmpeg를 사용하여 고품질 TTS + 오디오 개선을 적용합니다...
-   📊 적용 효과: 볼륨 정규화, 컴프레서, 노이즈 필터링
+🔧 Using FFmpeg for high-quality TTS + audio enhancement...
+   📊 Applied effects: 20% volume increase, compressor, noise filtering
 
-📝 8개 문장을 고품질로 개별 변환 중... (44100Hz, 320kbps)
+📝 Converting 8 sentences individually to high quality... (44100Hz, 320kbps)
   🔊 1/8: Hello, how are you today?...
   🔊 2/8: I am learning English with Python...
   ...
 
-🔗 고품질 파일들을 결합하는 중...
-✅ 고품질 음성 파일이 생성되었습니다: learn_0616.mp3
-📝 각 문장 사이에 정확히 1초의 무음이 추가되었습니다.
-🎵 음질: 44100Hz, 320kbps, 스테레오
-🔊 오디오 개선: 볼륨 정규화 + 컴프레서 + 노이즈 필터링
+🔗 Combining high-quality files...
+✅ High-quality audio file has been created: sample.mp3
+📝 Exactly 2 seconds of silence has been added between each sentence and at the end.
+🎵 Audio quality: 44100Hz, 320kbps, stereo
+🔊 Audio enhancement: 20% volume increase + compressor + noise filtering
 
-🎉 완료! 'learn_0616.mp3' 파일을 재생해보세요.
+🎉 Complete! Please play the 'sample.mp3' file.
 ```
 
-## 트러블슈팅
+## Troubleshooting
 
-### FFmpeg 관련 오류
-프로그램이 FFmpeg를 찾을 수 없다는 오류가 발생하면:
+### FFmpeg Related Errors
+If the program shows an error that FFmpeg cannot be found:
 
-1. **FFmpeg 설치 확인**:
+1. **Check FFmpeg Installation**:
    ```bash
    ffmpeg -version
    ```
 
-2. **macOS에서 설치**:
+2. **Install on macOS**:
    ```bash
    brew install ffmpeg
    ```
 
-3. **Ubuntu/Debian에서 설치**:
+3. **Install on Ubuntu/Debian**:
    ```bash
    sudo apt update && sudo apt install ffmpeg
    ```
 
-### 인터넷 연결 필요
-- gTTS는 Google의 온라인 TTS 서비스를 사용합니다
-- 변환 시 인터넷 연결이 필요합니다
+### Internet Connection Required
+- gTTS uses Google's online TTS service
+- Internet connection is required during conversion
 
-### 긴 텍스트 처리
-- 각 문장이 개별적으로 처리되므로 많은 문장이 있으면 시간이 걸릴 수 있습니다
-- 진행 상황이 실시간으로 표시됩니다
+### Long Text Processing
+- Each sentence is processed individually, so many sentences may take time
+- Progress is displayed in real-time
 
-## 영어 학습 활용법
+## English Learning Applications
 
-### 🎧 듣기 연습
-- 각 문장 사이 1초 pause로 명확한 구분
-- 고품질 음성으로 정확한 발음 학습
+### 🎧 Listening Practice
+- Clear distinction with 2-second pauses between sentences
+- Accurate pronunciation learning with high-quality audio
 
-### 🗣️ 따라하기 연습  
-- 문장 사이 pause를 활용해 따라 말하기
-- 컴프레서로 모든 소리가 명확하게 들림
+### 🗣️ Repeat Practice  
+- Use pauses between sentences for speaking practice
+- All sounds are clearly audible with compressor
 
-### 📝 받아쓰기 연습
-- 볼륨 정규화로 일정한 음량
-- 노이즈 필터링으로 깨끗한 음성
+### 📝 Dictation Practice
+- Consistent volume with volume normalization
+- Clean audio with noise filtering
 
-## 참고사항
+## Notes
 
-- 인터넷 연결이 필요합니다 (Google TTS API 사용)
-- 생성된 MP3 파일은 미국식 영어 발음으로 재생됩니다
-- 최고 품질 설정으로 파일 크기가 클 수 있습니다
+- Internet connection is required (uses Google TTS API)
+- Generated MP3 files play with US English pronunciation
+- File size may be large due to highest quality settings
 
-## 개발 정보
+## Development Information
 
-이 프로그램은 Claude Sonnet 4 모델을 통해 GitHub Copilot Agent mode로 작성되었습니다.
+This program was written using GitHub Copilot Agent mode with the Claude Sonnet 4 model.
